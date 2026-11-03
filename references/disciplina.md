@@ -46,15 +46,16 @@ documenta; mexida interna sem efeito externo não gera papel por gerar.
 4. **Testada no gate local** (`tools/ci.sh`/pre-commit; CI remoto só antes do hml, piso 27). É o que separa docs-as-code de "markdown no git" — e desde 2026-08-21 isto
    **roda**: `scripts/docs-gate.mjs` (comando `/docs-review`), `0` passa · `1` reprova · `2` nada
    verificável, que não é aprovação. Os oito gates (exemplos/snippets que rodam são disciplina de review, sem script):
-   - **Links** — link interno/externo que abre (link-checker no CI); link morto reprova.
+   - **Links** — link interno/externo que abre (link-checker no gate local); link morto reprova.
    - **Exemplos/snippets** — o código de exemplo **compila/roda** (doctest, exemplo executável, ou
      snippet extraído e testado). Exemplo que não roda é pior que nenhum: engana com autoridade.
    - **OpenAPI/contrato** — valida contra o schema **e** contra a implementação (drift check,
      `api-versionamento.md`).
-   - **Índice (§39)** — a contagem bate (`nº de entradas == nº de funções`); CI reprova se não.
+   - **Índice (§39)** — a contagem bate (`nº de entradas == nº de funções`); o gate reprova se não.
    - **Root limpo** (§5 deste arquivo) — `.md` **gerado** na raiz reprova.
    - **ADR** — `proposed` sem data ou mais velho que `--adr-dias` (default 30) reprova.
    - **Diagrama** — imagem de diagrama em `docs/`/`*_archive/` sem fonte `.mmd`/mermaid reprova.
+   - **Runbook** — `kubectl`/`docker`/`ssh`/`psql` solto em runbook reprova: só operação nomeada do ops (pisos 14/15/24).
 
    Duas decisões do gate que valem ser ditas: no **openapi**, ele usa **Spectral** quando existe e,
    quando não existe, roda um **piso embutido** que **declara ser piso** (menos regras, não
