@@ -1,5 +1,5 @@
 ---
-description: schematize-docs — revisa a documentação como se revisa código: roda os 7 gates (links, OpenAPI, drift, índice §39, root limpo, ADR `proposed`, diagrama sem fonte) e lê o que a máquina não lê (o exemplo bate? a doc mente?)
+description: schematize-docs — revisa a documentação como se revisa código: roda os 8 gates (links, OpenAPI, drift, índice §39, root limpo, ADR `proposed`, diagrama sem fonte, runbook sem ops) e lê o que a máquina não lê (o exemplo bate? a doc mente?)
 argument-hint: "[diretório ou PR]"
 ---
 

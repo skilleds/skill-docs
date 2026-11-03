@@ -26,6 +26,10 @@ heroísmo não escala nem dorme.
 
 Cada entrada de runbook é uma receita executável, na ordem em que se executa:
 
+> **Toda ação do runbook é uma operação nomeada do `<projeto>_ops`** (pisos 14, 15, 24): nada de `kubectl`,
+> `docker`, `ssh` ou SQL solto — a IA e o oncall copiam este texto. Falta o comando? **Crie no repo do ops**
+> e referencie aqui. Em prd, mutação é break-glass humano; a IA só faz `--dry-run`/plano.
+
 ```markdown
 ## Sintoma: latência de /checkout > 2s (alerta P1)
 
@@ -34,12 +38,12 @@ Cada entrada de runbook é uma receita executável, na ordem em que se executa:
 
 ### 1. Diagnóstico (o que olhar, em ordem)
 - Verifique a fila de repasse: `nats stream info REPASSE` — backlog crescendo?
-- Verifique o banco: conexões saturadas? `SELECT count(*) FROM pg_stat_activity`.
+- Verifique o banco: conexões saturadas? `checkout-ops db-status --env hml` (operação de leitura do ops, não SQL solto).
 - Verifique o dependente `payments`: [link health] responde 200?
 
 ### 2. Ação (o que fazer, por causa provável)
-- **Se backlog de fila:** escalar consumers → `kubectl scale deploy repasse-consumer --replicas=6`.
-- **Se pool de conexão saturado:** reciclar → `kubectl rollout restart deploy checkout`.
+- **Se backlog de fila:** escalar consumers → `checkout-ops scale repasse-consumer --replicas 6 --env hml --dry-run` e, depois de revisar o plano, sem `--dry-run`.
+- **Se pool de conexão saturado:** reciclar → `checkout-ops restart checkout --env hml`.
 - **Se `payments` down:** ativar circuit-breaker (flag `payments_degraded=true`) e escalar (§4).
 
 ### 3. Verificação (como sei que voltou)
@@ -47,7 +51,7 @@ Cada entrada de runbook é uma receita executável, na ordem em que se executa:
 - Um pedido de teste passa fim-a-fim (script `scripts/smoke-checkout.sh`).
 
 ### 4. Rollback / saída segura
-- Se a ação piorou: `kubectl rollout undo deploy checkout` volta à versão anterior.
+- Se a ação piorou: `checkout-ops rollback checkout --env hml` volta ao último release (do git, nunca à mão).
 - Reverter a flag `payments_degraded` quando `payments` estabilizar.
 
 ### 5. Escalar

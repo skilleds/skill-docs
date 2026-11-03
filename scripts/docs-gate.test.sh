@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Vermelho primeiro dos sete gates. Cada fixture e um repo de mentira com UM defeito de doc.
+# Vermelho primeiro dos oito gates. Cada fixture e um repo de mentira com UM defeito de doc.
 # EXCEÇÃO DECLARADA de strict mode (`schematize-shell` -> `references/piso.md` secao 1):
 # harness de teste roda sem `-e` de propósito — ele precisa continuar depois de um caso
 # vermelho para reportar TODOS, em vez de parar no primeiro.
@@ -140,6 +140,14 @@ d="$(repo g1)"; printf 'x' > "$d/docs/diagrama-arquitetura.png"
 checa "PNG de diagrama sem fonte reprova" 1 "imagem sem fonte" node "$G" "$d" --so diagrama
 d="$(repo g2)"; printf 'x' > "$d/docs/diagrama-arquitetura.png"; printf 'graph TD; A-->B\n' > "$d/docs/diagrama-arquitetura.mmd"
 checa "PNG com .mmd ao lado passa" 0 "" node "$G" "$d" --so diagrama
+
+echo "== 8. runbook com comando solto =="
+d="$(repo r1)"; printf '# Runbook\n\n- escalar: `kubectl scale deploy x --replicas=6`\n' > "$d/docs/runbook.md"
+checa "kubectl solto no runbook reprova" 1 "comando solto (kubectl)" node "$G" "$d" --so runbook
+d="$(repo r2)"; printf '# Runbook\n\n- reverter: `ssh root@vps systemctl restart x`\n' > "$d/docs/runbook.md"
+checa "ssh solto no runbook reprova" 1 "comando solto (ssh)" node "$G" "$d" --so runbook
+d="$(repo r3)"; printf '# Runbook\n\n- escalar: `x-ops scale x --replicas 6 --env hml`\n- nunca `kubectl` a mao\n' > "$d/docs/runbook.md"
+checa "operacao do ops passa" 0 "" node "$G" "$d" --so runbook
 
 echo "== nada verificavel nao e aprovacao =="
 d="$TMP/vazio"; mkdir -p "$d"

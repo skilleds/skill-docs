@@ -43,9 +43,9 @@ documenta; mexida interna sem efeito externo não gera papel por gerar.
 3. **Versionada.** A doc muda junto com o código, na mesma commit/PR, com o mesmo histórico. `git
    blame` na doc responde "por que isso mudou" tanto quanto no código. Changelog e SemVer
    (`api-versionamento.md`) versionam a superfície pública.
-4. **Testada no CI.** É o que separa docs-as-code de "markdown no git" — e desde 2026-08-21 isto
+4. **Testada no gate local** (`tools/ci.sh`/pre-commit; CI remoto só antes do hml, piso 27). É o que separa docs-as-code de "markdown no git" — e desde 2026-08-21 isto
    **roda**: `scripts/docs-gate.mjs` (comando `/docs-review`), `0` passa · `1` reprova · `2` nada
-   verificável, que não é aprovação. Os sete gates (exemplos/snippets que rodam são disciplina de review, sem script):
+   verificável, que não é aprovação. Os oito gates (exemplos/snippets que rodam são disciplina de review, sem script):
    - **Links** — link interno/externo que abre (link-checker no CI); link morto reprova.
    - **Exemplos/snippets** — o código de exemplo **compila/roda** (doctest, exemplo executável, ou
      snippet extraído e testado). Exemplo que não roda é pior que nenhum: engana com autoridade.
@@ -113,7 +113,7 @@ oncall às 3h com o serviço caído, o auditor que pergunta "por que essa decis�
 | Changelog | `CHANGELOG.md` na raiz (Keep a Changelog) — `api-versionamento.md` |
 | Diagramas | `docs/` como código (mermaid/C4 textual) — `indice-diagramas.md` |
 | Índice/MAPA (§39) | `<projeto>_archive/index/` — `indice-diagramas.md` |
-| Plano/relatório/handoff/scan/auditoria | `<projeto>_archive/**` (§28) |
+| Plano/relatório/handoff/scan/auditoria | `<projeto>_archive/**` (§28), incl. piso 26: `relatorios/AAAA-MM-DD_HHMM.md`, `.ritmo.json`, `custos/` (formato: `schematize-engineering` -> `references/orquestracao.md`) |
 
 O **root fica limpo**: só código, config e os poucos MDs de mão — `README`, `CLAUDE`, `SKILL`, `LICENSE`, `CHANGELOG`, `CONTRIBUTING`, `CODE_OF_CONDUCT`, `SECURITY`, `AGENTS`, `CONTEXT`. *(A fonte da allowlist é o gate `scripts/docs-gate.mjs --so root`; esta lista a espelha. `CHANGELOG` entra porque a própria casa normatiza Keep a Changelog **na raiz**; ADR **não** entra — mora em `<projeto>_archive/decisoes/`.)*
 Largar MAPA/índice/plano/relatório no root é violação (§37) e fere a contenção de workspace. Antes

@@ -30,7 +30,7 @@ Digite `/docs-help` pra ver todos. Em resumo:
 | `/docs-help` | lista todos os comandos do schematize-docs |
 | `/docs-adr` | cria ou movimenta um **ADR** (proposed → accepted/rejected) no `<projeto>_archive/decisoes/` (caminho único da casa), com contexto/decisão/consequências/alternativas; nunca deixa um `proposed` órfão |
 | `/docs-runbook` | scaffolda/atualiza um **runbook** operacional (sintomas → diagnóstico → ação → verificação → rollback → escalar) pra um serviço/incidente |
-| `/docs-review` | **revisa a doc como se revisa código**: roda os 7 gates (links, OpenAPI, drift, índice §39, root limpo, ADR `proposed`, diagrama sem fonte) e lê o que a máquina não lê |
+| `/docs-review` | **revisa a doc como se revisa código**: roda os 8 gates (links, OpenAPI, drift, índice §39, root limpo, ADR `proposed`, diagrama sem fonte, runbook sem ops) e lê o que a máquina não lê |
 | `/docs-api` | gera/valida a **API doc** (OpenAPI 3.1/contrato) a partir do código quando possível; checa drift entre spec e implementação |
 | `/docs-load` | carrega à força TODO o corpo normativo (disciplina, ADR, runbook, API/versionamento, índice/diagramas) e passa a aplicá-lo |
 | `/docs-claude` | cria ou mescla o `CLAUDE.md` sempre-on de documentação na raiz do repo |
@@ -48,9 +48,9 @@ Os comandos ficam em `assets/commands/` e são instalados em `.claude/commands/`
 2. **Toda decisão relevante vira ADR** (`references/adr.md`): escolha de banco/broker/linguagem,
    padrão arquitetural, mudança de contrato, qualquer desvio do padrão. Ciclo
    `proposed → accepted/rejected` com motivo datado — nunca `proposed` pra sempre.
-3. **Doc é código:** mora no repo, revisada no PR, versionada, e **testada no CI** (o gate
-   prova: link que abre, spec que casa com a implementação, `proposed` com prazo, diagrama com fonte;
-   exemplo que roda e runbook exercitado em game day são verificados em review — sem script). Doc quebrada reprova o gate.
+3. **Doc é código:** mora no repo, revisada no review, versionada, e **testada no gate local** (`scripts/docs-gate.mjs` no `tools/ci.sh`/pre-commit; CI remoto só antes do hml — piso 27). O gate
+   prova: link que abre, spec que casa com a implementação, `proposed` com prazo, diagrama com fonte, runbook só com operação do ops;
+   exemplo que roda e runbook exercitado em game day são verificados em review — sem script. Doc quebrada reprova o gate.
 4. **Não trabalhe de memória** — as anatomias (ADR, runbook, OpenAPI, índice) e os pisos estão
    nos references. Aplique os pisos abaixo independentemente do reference carregado.
 
@@ -79,8 +79,7 @@ Independente do reference, estes limites nunca são cruzados:
 3. **Docs-as-code: no repo, revisada, versionada, TESTADA.** A doc vive ao lado do código (não
    num wiki que deriva), passa no **mesmo review** do PR, e é **verificada no CI**: link que
    abre, exemplo/snippet que roda ou compila, OpenAPI que valida, índice cuja contagem bate
-   (§39). Link morto / exemplo quebrado / spec fora de sincronia é **bug** que reprova o gate,
-   não "detalhe".
+   (§39). Link morto / spec fora de sincronia é **bug** que reprova o gate, não "detalhe". Exemplo/snippet que roda ou compila é checado em review (ainda sem script).
 4. **Contrato e doc geram-se do código quando possível.** OpenAPI, tabela de rotas, índice de
    microfunções — preferir **derivar** do código (anotações/AST/doc-comments) a manter à mão.
    Fonte da verdade é o código; doc que duplica à mão **deriva** e mente. Onde não dá gerar, o CI
@@ -148,3 +147,5 @@ Independente do reference, estes limites nunca são cruzados:
   **gerador** e o **gate** rodam na stack: OpenAPI/índice saem do código daquela linguagem
   (`/<slug>-index`, `/<slug>-review`), e a doc-as-code é testada no CI dela. Esta skill dá a
   disciplina; cada linguagem executa.
+
+Herda os pisos 22–29 da `schematize-engineering` (git como trava de conclusão, deploy só do git, ops é o gate da IA, sem agents inúteis, relatório 30 min/handoff 6 h, CI remoto só antes do hml, microserviço autônomo, build em dev/hml + higiene).

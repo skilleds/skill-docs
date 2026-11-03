@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// schematize-docs — os SETE gates que a skill prometia e nao tinha (vistoria de 2026-08-21:
+// schematize-docs — os OITO gates que a skill prometia e nao tinha (vistoria de 2026-08-21:
 // "promete 5 gates e entrega zero scripts"). Doc nao e "melhor esforco": e verificavel, e o que e
 // verificavel a casa verifica — inclusive a doc desta skill.
 //
@@ -10,6 +10,7 @@
 //   root     o root fica limpo: so codigo, config e os poucos MDs de mao
 //   adr      ADR `proposed` sem data, ou mais velho que --adr-dias (default 30), e orfao
 //   diagrama imagem de diagrama (png/jpg/svg...) em docs/ ou *_archive/ sem fonte .mmd/mermaid
+//   runbook  runbook com kubectl/docker/ssh/scp/rsync/psql solto (pisos 14/15/24: so operacao nomeada do ops)
 //
 // uso: docs-gate.mjs [dir] [--so links,openapi,...] [--spec caminho] [--externos] [--adr-dias N] [--json]
 //      0 = passa · 1 = REPROVA · 2 = nada para verificar / uso errado
@@ -22,7 +23,7 @@ const argv = process.argv.slice(2)
 const opt = (k) => { const i = argv.indexOf(k); return i >= 0 ? argv[i + 1] : undefined }
 const consumidos = new Set([opt('--so'), opt('--spec'), opt('--adr-dias')].filter(Boolean))
 const raiz = resolve(argv.find(a => !a.startsWith('--') && !consumidos.has(a)) || '.')
-const SO = (opt('--so') || 'links,openapi,drift,indice,root,adr,diagrama').split(',').map(s => s.trim())
+const SO = (opt('--so') || 'links,openapi,drift,indice,root,adr,diagrama,runbook').split(',').map(s => s.trim())
 const IGNORA = new Set(['node_modules', '.git', 'target', 'dist', 'build', '.next', '_build', 'versions', 'vendor', 'coverage'])
 
 function varrer(dir, filtro, achados = []) {
@@ -245,6 +246,22 @@ if (SO.includes('adr')) {
       const idade = Math.floor((Date.now() - Date.parse(dt[1] + 'T00:00:00Z')) / 86400000)
       if (idade > limite) falhas.push(`adr: ${rel(f)} proposed ha ${idade} dia(s) (limite ${limite}) — decida accepted/rejected, datado; proposed eterno e orfao RED`)
     }
+  }
+}
+
+// ---------------------------------------------------------------------------- 8. runbook sem ops
+if (SO.includes('runbook')) {
+  // Piso 15/24: toda acao no servidor e uma operacao nomeada do `<projeto>_ops`. Runbook que manda
+  // `kubectl`/`docker`/`ssh`/SQL solto ensina a IA e o oncall a mexer na VPS a mao. Linha que PROIBE
+  // o comando (nunca/vetado/nada de/proibido) ou marcada `<!-- ops-ok -->` passa.
+  const rbs = varrer(raiz, (n, p) => /\.md$/i.test(n) && /runbook/i.test(relative(raiz, p)))
+  if (rbs.length) rodou++
+  const SOLTO = /\b(kubectl|docker\s+(?:run|exec|compose|stop|restart|rm)|ssh|scp|rsync|psql|systemctl)\b/
+  for (const f of rbs) {
+    readFileSync(f, 'utf8').split('\n').forEach((l, i) => {
+      if (!SOLTO.test(l) || /ops-ok|nunca|vetad|proibid|nada de/i.test(l)) return
+      falhas.push(`runbook: ${rel(f)}:${i + 1} comando solto (${l.match(SOLTO)[1]}) — use uma operacao nomeada do <projeto>_ops (pisos 14/15/24)`)
+    })
   }
 }
 

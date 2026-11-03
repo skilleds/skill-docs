@@ -4,6 +4,14 @@ Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https:
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 
+## [Não lançado]
+### Corrigido
+- `references/runbooks.md` e `/docs-runbook`: `kubectl` solto trocado por operação nomeada do `<projeto>_ops` (pisos 14/15/24); regra "falta comando → cria no ops".
+- "Testada no CI" → gate local (`tools/ci.sh`/pre-commit), CI remoto só pré-hml (piso 27); piso 3 alinhado ao que existe (exemplos que rodam = review).
+### Adicionado
+- Oitavo gate `runbook` em `docs-gate.mjs` (kubectl/docker/ssh/scp/rsync/psql/systemctl solto reprova) com testes vermelho→verde.
+- Artefatos do piso 26 (`relatorios/`, `.ritmo.json`, `custos/`) no layout do archive; bloco "Herda os pisos 22–29".
+
 ## [0.5.0] — 2026-10-14
 Integração com as 8 skills novas (skill-dev, iam, api, payments, postgres, incident, analytics, git) e saneamento pelo gate novo.
 

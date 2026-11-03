@@ -17,13 +17,13 @@ runbook.
 Por sintoma/procedimento, os seis blocos (§2):
 - **Sintoma / impacto** — o alerta que dispara, o efeito no negócio, links de dashboard/alerta.
 - **Diagnóstico** — o que olhar, **em ordem**, com o comando exato.
-- **Ação** — o que fazer por causa provável, **comando literal e copiável** (nome do deploy/host).
+- **Ação** — o que fazer por causa provável, **comando literal e copiável** que é uma **operação nomeada do `<projeto>_ops`** (nunca `kubectl`/`docker`/`ssh`/SQL solto; falta comando → cria no ops).
 - **Verificação** — como sei que voltou (métrica < X por N min; smoke que passa fim-a-fim).
 - **Rollback / saída segura** — se a ação piorou, como reverter; aviso antes de todo passo destrutivo.
 - **Escalar** — quando e quem acionar (não resolveu em N min; suspeita de perda de dados).
 
 ## 3. Regras (§3)
-Comando exato copiável; passo destrutivo idempotente/reversível com rollback ao lado; **segredo
+Comando exato copiável, sempre uma operação nomeada do ops (pisos 14/15/24); passo destrutivo idempotente/reversível com rollback ao lado; **segredo
 nunca no runbook** (referencie o cofre/variável); **datado e validado** (quando foi exercitado por
 último); linka o dashboard/alerta que dispara.
 
