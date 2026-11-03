@@ -114,7 +114,7 @@ oncall às 3h com o serviço caído, o auditor que pergunta "por que essa decis�
 | Changelog | `CHANGELOG.md` na raiz (Keep a Changelog) — `api-versionamento.md` |
 | Diagramas | `docs/` como código (mermaid/C4 textual) — `indice-diagramas.md` |
 | Índice/MAPA (§39) | `<projeto>_archive/index/` — `indice-diagramas.md` |
-| Plano/relatório/handoff/scan/auditoria | `<projeto>_archive/**` (§28), incl. piso 26: `relatorios/AAAA-MM-DD_HHMM.md`, `.ritmo.json`, `custos/` (formato: `schematize-engineering` -> `references/orquestracao.md`) |
+| Plano/relatório/handoff/scan/auditoria | `<projeto>_archive/**` (§28), incl. piso 26: a pasta `relatorios/` (um MD por AAAA-MM-DD_HHMM), `.ritmo.json`, `custos/` (formato: `schematize-engineering` -> `references/orquestracao.md`) |
 
 O **root fica limpo**: só código, config e os poucos MDs de mão — `README`, `CLAUDE`, `SKILL`, `LICENSE`, `CHANGELOG`, `CONTRIBUTING`, `CODE_OF_CONDUCT`, `SECURITY`, `AGENTS`, `CONTEXT`. *(A fonte da allowlist é o gate `scripts/docs-gate.mjs --so root`; esta lista a espelha. `CHANGELOG` entra porque a própria casa normatiza Keep a Changelog **na raiz**; ADR **não** entra — mora em `<projeto>_archive/decisoes/`.)*
 Largar MAPA/índice/plano/relatório no root é violação (§37) e fere a contenção de workspace. Antes

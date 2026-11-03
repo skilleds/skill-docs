@@ -108,7 +108,7 @@ flowchart LR
 | Artefato | Onde | Gate |
 |---|---|---|
 | `INDEX_GLOBAL.md` / `INDEX_FUNCTIONS.md` | `<projeto>_archive/index/` | contagem bate (§39), trava merge |
-| Relatórios/planos/handoffs/scans/auditorias | `<projeto>_archive/**` (§28), incl. `relatorios/AAAA-MM-DD_HHMM.md`, `.ritmo.json`, `custos/` (piso 26; formato em `schematize-engineering` -> `references/orquestracao.md`) | PR sem o `.md` exigido não passa |
+| Relatórios/planos/handoffs/scans/auditorias | `<projeto>_archive/**` (§28), incl. a pasta `relatorios/` (um MD por AAAA-MM-DD_HHMM), `.ritmo.json`, `custos/` (piso 26; formato em `schematize-engineering` -> `references/orquestracao.md`) | PR sem o `.md` exigido não passa |
 | Diagramas (C4/mermaid) | texto no `.md` (README/índice/ADR) | versionado como código; gate `diagrama` reprova imagem sem fonte |
 | ADR | `<projeto>_archive/decisoes/ADR-NNNN-<slug>.md` | gate `adr` (`proposed` não fica órfão), `adr.md` |
 | Runbook / OpenAPI | `docs/runbook*` · `openapi.yaml` (raiz ou `docs/`) | gates `links` e `openapi`/`drift`, `runbooks.md` / `api-versionamento.md` |
