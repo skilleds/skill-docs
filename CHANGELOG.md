@@ -4,7 +4,7 @@ Todas as mudanças relevantes deste pacote, no formato [Keep a Changelog](https:
 com versionamento [SemVer](https://semver.org/lang/pt-BR/).
 
 
-## [Não lançado]
+## [0.6.0] — 2026-11-03
 ### Corrigido
 - `references/runbooks.md` e `/docs-runbook`: `kubectl` solto trocado por operação nomeada do `<projeto>_ops` (pisos 14/15/24); regra "falta comando → cria no ops".
 - "Testada no CI" → gate local (`tools/ci.sh`/pre-commit), CI remoto só pré-hml (piso 27); piso 3 alinhado ao que existe (exemplos que rodam = review).
