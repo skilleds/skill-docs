@@ -15,7 +15,7 @@ checa() { local nome="$1" esp="$2" agulha="$3"; shift 3
   echo "  ✔ $nome"; ok=$((ok+1)); }
 
 repo() { # $1 = nome -> ecoa caminho de um repo saudavel
-  local d="$TMP/$1"; rm -rf "$d"; mkdir -p "$d/docs" "$d/src"
+  local d="$TMP/$1"; rm -rf "${d:?}"; mkdir -p "$d/docs" "$d/src"
   cat > "$d/README.md" <<'M'
 # Loja
 
